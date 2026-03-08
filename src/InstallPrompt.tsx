@@ -10,6 +10,12 @@ export function InstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
 
+  // The custom beforeinstallprompt flow is unreliable on some Android browsers
+  // and can appear to get "stuck". Let Android users use the built‑in
+  // "Add to Home screen" / "Install app" menu instead.
+  const isAndroid =
+    typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent || '')
+
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault()
@@ -37,7 +43,7 @@ export function InstallPrompt() {
     setShowPrompt(false)
   }
 
-  if (isInstalled || !showPrompt || !deferredPrompt) return null
+  if (isAndroid || isInstalled || !showPrompt || !deferredPrompt) return null
 
   return (
     <div className="install-prompt">
