@@ -4,6 +4,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages project site base path:
+  // https://ubuntu-apps.github.io/mortgage-calculator/
+  base: '/mortgage-calculator/',
   plugins: [
     react(),
     VitePWA({
@@ -16,18 +19,19 @@ export default defineConfig({
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',
-        scope: '/',
-        start_url: '/',
+        scope: '/mortgage-calculator/',
+        start_url: '/mortgage-calculator/',
         orientation: 'portrait',
         icons: [
           {
-            src: '/icons/icon-192.png',
+            // Relative to manifest location, resolves to /mortgage-calculator/icons/icon-192.png
+            src: 'icons/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/icons/icon-512.png',
+            src: 'icons/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
