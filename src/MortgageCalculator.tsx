@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 
 /**
  * Standard mortgage payment formula:
@@ -50,13 +50,29 @@ function sanitizeMoneyKeystroke(value: string): string {
   return `${before}${after}`
 }
 
-export function MortgageCalculator() {
-  const [propertyValue, setPropertyValue] = useState<string>('450,000')
-  const [downPayment, setDownPayment] = useState<string>('90,000')
-  const [rate, setRate] = useState<string>('6.5')
-  const [term, setTerm] = useState<string>('30')
-  const [taxes, setTaxes] = useState<string>('0')
-  const [insurance, setInsurance] = useState<string>('0')
+export type MortgageState = {
+  propertyValue: string
+  downPayment: string
+  rate: string
+  term: string
+  taxes: string
+  insurance: string
+}
+
+type MortgageCalculatorProps = {
+  state: MortgageState
+  onChange: (next: MortgageState) => void
+}
+
+export function MortgageCalculator({ state, onChange }: MortgageCalculatorProps) {
+  const { propertyValue, downPayment, rate, term, taxes, insurance } = state
+
+  const updateField = (field: keyof MortgageState, value: string) => {
+    onChange({
+      ...state,
+      [field]: value,
+    })
+  }
 
   const loanAmount = useMemo(() => {
     const value = parseMoneyInput(propertyValue)
@@ -70,8 +86,8 @@ export function MortgageCalculator() {
     return calculateMonthlyPayment(loanAmount, r, t)
   }, [loanAmount, rate, term])
 
-  const monthlyTaxes = useMemo(() => parseMoneyInput(taxes), [taxes])
-  const monthlyInsurance = useMemo(() => parseMoneyInput(insurance), [insurance])
+  const monthlyTaxes = useMemo(() => parseMoneyInput(taxes) / 12, [taxes])
+  const monthlyInsurance = useMemo(() => parseMoneyInput(insurance) / 12, [insurance])
 
   const totalMonthlyPayment = useMemo(() => {
     return monthlyPaymentPI + monthlyTaxes + monthlyInsurance
@@ -91,38 +107,38 @@ export function MortgageCalculator() {
       <h1>Mortgage Calculator</h1>
 
       <div className="input-group">
-        <label htmlFor="propertyValue">Property Value</label>
+        <label htmlFor="propertyValue">Property Value ($)</label>
         <input
           id="propertyValue"
           type="text"
           inputMode="decimal"
           min="0"
           value={propertyValue}
-          onChange={(e) => setPropertyValue(sanitizeMoneyKeystroke(e.target.value))}
+          onChange={(e) => updateField('propertyValue', sanitizeMoneyKeystroke(e.target.value))}
           onBlur={() => {
             const raw = propertyValue.trim()
             if (!raw) return
             const v = parseMoneyInput(raw)
-            setPropertyValue(v === 0 ? '0' : formatMoneyInput(v, 0))
+            updateField('propertyValue', v === 0 ? '0' : formatMoneyInput(v, 0))
           }}
           placeholder="e.g. 450,000"
         />
       </div>
 
       <div className="input-group">
-        <label htmlFor="downPayment">Down Payment</label>
+        <label htmlFor="downPayment">Down Payment ($)</label>
         <input
           id="downPayment"
           type="text"
           inputMode="decimal"
           min="0"
           value={downPayment}
-          onChange={(e) => setDownPayment(sanitizeMoneyKeystroke(e.target.value))}
+          onChange={(e) => updateField('downPayment', sanitizeMoneyKeystroke(e.target.value))}
           onBlur={() => {
             const raw = downPayment.trim()
             if (!raw) return
             const v = parseMoneyInput(raw)
-            setDownPayment(v === 0 ? '0' : formatMoneyInput(v, 0))
+            updateField('downPayment', v === 0 ? '0' : formatMoneyInput(v, 0))
           }}
           placeholder="e.g. 90,000"
         />
@@ -138,7 +154,7 @@ export function MortgageCalculator() {
           max="30"
           step="0.125"
           value={rate}
-          onChange={(e) => setRate(e.target.value)}
+          onChange={(e) => updateField('rate', e.target.value)}
           placeholder="e.g. 6.5"
         />
       </div>
@@ -153,7 +169,7 @@ export function MortgageCalculator() {
           max="50"
           step="1"
           value={term}
-          onChange={(e) => setTerm(e.target.value)}
+          onChange={(e) => updateField('term', e.target.value)}
           placeholder="e.g. 30"
         />
       </div>
@@ -165,40 +181,40 @@ export function MortgageCalculator() {
       </div>
 
       <div className="input-group">
-        <label htmlFor="taxes">Monthly Taxes</label>
+        <label htmlFor="taxes">Property Taxes per year ($)</label>
         <input
           id="taxes"
           type="text"
           inputMode="decimal"
           min="0"
           value={taxes}
-          onChange={(e) => setTaxes(sanitizeMoneyKeystroke(e.target.value))}
+          onChange={(e) => updateField('taxes', sanitizeMoneyKeystroke(e.target.value))}
           onBlur={() => {
             const raw = taxes.trim()
             if (!raw) return
             const v = parseMoneyInput(raw)
-            setTaxes(v === 0 ? '0' : formatMoneyInput(v, 2))
+            updateField('taxes', v === 0 ? '0' : formatMoneyInput(v, 2))
           }}
-          placeholder="e.g. 350"
+          placeholder="e.g. 4,200"
         />
       </div>
 
       <div className="input-group">
-        <label htmlFor="insurance">Monthly Insurance</label>
+        <label htmlFor="insurance">Insurance per year ($)</label>
         <input
           id="insurance"
           type="text"
           inputMode="decimal"
           min="0"
           value={insurance}
-          onChange={(e) => setInsurance(sanitizeMoneyKeystroke(e.target.value))}
+          onChange={(e) => updateField('insurance', sanitizeMoneyKeystroke(e.target.value))}
           onBlur={() => {
             const raw = insurance.trim()
             if (!raw) return
             const v = parseMoneyInput(raw)
-            setInsurance(v === 0 ? '0' : formatMoneyInput(v, 2))
+            updateField('insurance', v === 0 ? '0' : formatMoneyInput(v, 2))
           }}
-          placeholder="e.g. 120"
+          placeholder="e.g. 1,200"
         />
       </div>
 
