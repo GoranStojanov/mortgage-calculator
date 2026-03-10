@@ -13,7 +13,7 @@
 }
 
 .mortgage-calculator h1 {
-  font-size: 1.75rem;
+  font-size: 2.1rem;
   font-weight: 600;
   margin: 0 0 0.5rem;
   color: var(--color-text);
@@ -26,15 +26,15 @@
 }
 
 .input-group label {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--color-text-muted);
 }
 
 .input-group input {
   width: 100%;
-  padding: 0.875rem 1rem;
-  font-size: 1.125rem;
+  padding: 1rem 1.15rem;
+  font-size: 1.3rem;
   border: 1.5px solid var(--color-border);
   border-radius: 12px;
   background: var(--color-input-bg);
@@ -95,7 +95,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--color-text-muted);
 }
 
@@ -148,4 +148,50 @@
   border: 1px solid var(--color-border);
   border-radius: 10px;
   cursor: pointer;
+}
+
+/* Bottom navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  padding: 0.5rem 1.5rem;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 90;
+}
+
+@media (prefers-color-scheme: light) {
+  .bottom-nav {
+    background: rgba(248, 250, 252, 0.96);
+  }
+}
+
+.bottom-nav-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  padding: 0.35rem 0.45rem;
+}
+
+.bottom-nav-button svg {
+  width: 32px;
+  height: 32px;
+}
+
+.bottom-nav-button:focus-visible {
+  color: var(--color-accent);
 }
