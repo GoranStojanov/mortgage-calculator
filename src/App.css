@@ -269,3 +269,49 @@
 .bottom-nav-button:focus-visible {
   color: var(--color-accent);
 }
+
+/* Mobile-friendly sizing */
+@media (max-width: 768px) {
+  .mortgage-calculator h1 {
+    font-size: 2rem;
+  }
+
+  .input-group label {
+    font-size: 1rem;
+  }
+
+  .input-group input {
+    font-size: 1.3rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .result-label {
+    font-size: 1rem;
+  }
+
+  .summary-row {
+    font-size: 1rem;
+  }
+
+  .info-panel p,
+  .load-panel-subtitle,
+  .load-item {
+    font-size: 1rem;
+  }
+
+  .bottom-nav {
+    height: 80px;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .bottom-nav-button {
+    font-size: 0.9rem;
+    gap: 0.25rem;
+    padding: 0.35rem 0.4rem;
+  }
+
+  .bottom-nav-button svg {
+    width: 32px;
+    height: 32px;
+  }
+}
